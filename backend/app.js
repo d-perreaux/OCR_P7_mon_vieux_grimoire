@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const userRoutes = require('./routes/user.js');
+
 mongoose.connect('mongodb+srv://user:tata@cluster0.v9dxttl.mongodb.net/',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -8,6 +10,8 @@ mongoose.connect('mongodb+srv://user:tata@cluster0.v9dxttl.mongodb.net/',
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,13 +25,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use( (req, res, next) => {
-    res.status(201);
-    next();
-})
+app.use('/api/auth', userRoutes);
 
-app.use( (req, res, next) => {
-    res.json( {message: 'coucou'})
-})
 
 module.exports = app;
