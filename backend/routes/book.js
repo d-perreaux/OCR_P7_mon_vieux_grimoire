@@ -12,7 +12,7 @@ router.get('/:id', bookCtrl.getBookById);
 
 router.post('/', auth, multer, bookCtrl.addBook);
 
-router.put('/:id', auth, bookCtrl.updateBookById);
+router.put('/:id', auth, multer, bookCtrl.updateBookById);
 
 router.delete('/:id', auth, bookCtrl.deleteBookbyId);
 
