@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.get('/', bookCtrl.getAllBooks);
 router.get('/:id', bookCtrl.getBookById);
 // router.get('/bestrating', bookCtrl.);
 
-router.post('/', auth, bookCtrl.addBook);
+router.post('/', auth, multer, bookCtrl.addBook);
 
 router.put('/:id', auth, bookCtrl.updateBookById);
 
