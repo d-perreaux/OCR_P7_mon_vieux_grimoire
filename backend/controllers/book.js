@@ -1,4 +1,5 @@
 const Book = require('../models/Book.js');
+const fs = require('fs');
 
 exports.addBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
@@ -34,9 +35,24 @@ exports.updateBookById = (req, res, next) => {
 }
 
 exports.deleteBookbyId = (req, res, next) => {
-    Book.deleteOne( {_id: req.params.id})
-        .then( () => res.status(200).json( {message: 'Livre supprimé'}))
-        .catch( error => res.status(404).json( {error} ))
+    Book.findOne({_id: req.params.id})
+        .then( book => {
+            if (book.userId != req.auth.userId) {
+                res.status(401).json( { message: 'Non-autorisé'});
+            } else {
+                const filename = book.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    Book.deleteOne( {_id: req.params.id})
+                    .then( () => res.status(200).json( {message: 'Livre supprimé'}))
+                    .catch( error => res.status(404).json( {error} ))
+                })
+            }
+        })
+        .catch( error => {
+            res.status(500).json( {error} );
+        });
 }
+
+
 
 
