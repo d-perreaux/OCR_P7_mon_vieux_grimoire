@@ -59,7 +59,7 @@ exports.deleteBookbyId = (req, res, next) => {
     Book.findOne({_id: req.params.id})
         .then( book => {
             if (book.userId != req.auth.userId) {
-                res.status(403).json( { message: '403: unauthorized request'});
+                res.status(400).json( { message: '403: unauthorized request'});
             } else {
                 const filename = book.imageUrl.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
@@ -114,4 +114,13 @@ exports.rateBookById = (req, res, next) => {
             }
         })
         .catch( error => res.status(404).json( {error} ))
+}
+
+exports.getBestRatedBooks = (req, res, next) => {
+    Book.find()
+        .then( books => {
+            bestRatedBooks = books.sort((a, b) => b.averageRating - a.averageRating).slice(0, 3);
+            res.status(200).json(bestRatedBooks);
+        })
+        .catch(error => res.status(400).json( {error} ))
 }

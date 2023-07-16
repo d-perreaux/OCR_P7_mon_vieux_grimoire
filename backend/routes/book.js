@@ -8,8 +8,9 @@ const router = express.Router();
 const bookCtrl = require('../controllers/book.js');
 
 router.get('/', bookCtrl.getAllBooks);
+router.get('/bestrating', bookCtrl.getBestRatedBooks);
 router.get('/:id', bookCtrl.getBookById);
-// router.get('/bestrating', bookCtrl);
+
 
 router.post('/', auth, multer, bookCtrl.addBook);
 
