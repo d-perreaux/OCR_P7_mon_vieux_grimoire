@@ -8,8 +8,8 @@ const bookSchema = mongoose.Schema({
     year: {type: Number, required: true},
     genre: {type: String, required: true}, 
     ratings: [ {    // each element of the array ratings is an object 'rate' with userId and grade property
-        userId: {type: String, required: false},
-        grade: {type: Number, required: false}
+        userId: {type: String, required: true},
+        grade: {type: Number, required: true}
     }
     ],
     averageRating: {type: Number, required: false}
