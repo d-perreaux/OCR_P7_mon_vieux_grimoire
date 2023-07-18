@@ -2,6 +2,9 @@ const Book = require('../models/Book.js');
 const fs = require('fs');
 
 exports.addBook = (req, res, next) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'Fichier image manquant' });
+    }
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject._userId;
@@ -84,9 +87,9 @@ function calculateAverageRating(book) {
     if (ratings.length === 0) {
         book.averageRating = 0;
     } else {
-        const sum = ratings.reduce((accumulator, rating) => accumulator + rating.grade, 0);
         // reduce method reduce the array elements to an unique value. Here accumulator.
-        book.averageRating = (sum / ratings.length).toFixed(1);
+        const sum = ratings.reduce((accumulator, rating) => accumulator + rating.grade, 0);
+        book.averageRating = parseFloat((sum / ratings.length).toFixed(1));
     }
 }
 
@@ -104,6 +107,7 @@ exports.rateBookById = (req, res, next) => {
                     grade: req.body.rating
                 };
                 bookObject.ratings.push(newRating);
+
                 calculateAverageRating(bookObject);
 
                 Book.updateOne( { _id: req.params.id}, { ...bookObject, _id: req.params.id})
