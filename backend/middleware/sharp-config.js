@@ -9,7 +9,10 @@ const MIME_TYPES = {
 }
 
 const uploadSharpedImage = (req, res, next) => {
-    const bookData = JSON.parse(req.body.book);
+
+    // Check if there is an image to upload in the put request
+    const bookData = req.body.book ? JSON.parse(req.body.book) : null;
+
     // Check is the book datas are correct. 
     // If we don't check, a file can be upload without adding a book in the database
     if (!req.file || !bookData.title || !bookData.author || !bookData.year || !bookData.genre) {
