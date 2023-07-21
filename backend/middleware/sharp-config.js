@@ -1,12 +1,6 @@
 const sharp = require("sharp");
 const crypto = require('crypto');
 
-const MIME_TYPES = {
-    'image/jpg': 'jpg',
-    'image/jpeg': 'jpg',
-    'image/webp': 'webp',
-    'image/png': 'png'
-}
 
 const uploadSharpedImage = (req, res, next) => {
 
@@ -20,8 +14,7 @@ const uploadSharpedImage = (req, res, next) => {
     }
 
     const randomString = crypto.randomBytes(16).toString('hex');
-    const extension = MIME_TYPES[req.file.mimetype];
-    req.file.filename = randomString + Date.now() + '.' + extension;
+    req.file.filename = randomString + Date.now() + '.webp';
 
     const { buffer } = req.file;
     sharp(buffer)
